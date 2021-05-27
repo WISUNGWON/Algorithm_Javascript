@@ -1,3 +1,5 @@
+// understand
+
 let isValid = function (s) {
   const temp = {
     '(': ')',
