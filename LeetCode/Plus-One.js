@@ -14,3 +14,4 @@ let plusOne = function (digits) {
 };
 
 // Comment : 최대한 내장 함수 사용하지 않고 구현하기!
+let arr = [0];
