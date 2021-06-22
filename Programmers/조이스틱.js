@@ -32,3 +32,5 @@ function solution(name) {
   answer += Math.min(max1, max2);
   return answer;
 }
+
+console.log(solution('ABAAAAAAAAABB'));
