@@ -1,12 +1,11 @@
-//내 초기 코드 (BFS)
+// 프로그래머스 단어변환
 
+//내 초기 코드 (BFS)
 function solution(begin, target, words) {
   var answer = 0;
-  let queue = [];
   let visited = Array(words.length).fill(false);
   function bfs(word, count) {
-    let start = word;
-    queue.push(start);
+    let queue = [word];
     while (queue.length > 0) {
       let nowWord = queue.shift();
       for (let i = 0; i < words.length; i++) {
