@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "eslint-config-prettier": "^8.1.0"
+    "eslint-config-prettier": "^8.1.0",
+    "ts-node": "^10.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.4"
   }
 }
