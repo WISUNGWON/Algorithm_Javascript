@@ -1,19 +1,21 @@
 // 프로그래머스 - 완주하지 못한선수
 function solution(participant, completion) {
   var answer = '';
-  let map = new Map();
-  for (let i = 0; i < completion.length; i++) {
-    let value = map.get(completion[i]);
-    value ? map.set(completion[i], value + 1) : map.set(completion[i], 1);
-  }
+  const participantMap = new Map();
+
+  completion.forEach((person) => {
+    let personCnt = participantMap.get(person);
+    participantMap.set(person, personCnt ? personCnt + 1 : 1);
+  });
 
   for (let i = 0; i < participant.length; i++) {
-    let person = participant[i];
-    let value = map.get(participant[i]);
-    if (value === 0 || value === undefined) {
+    const person = participant[i];
+    let personCnt = participantMap.get(person);
+    if (personCnt === 0 || personCnt === undefined) {
       answer = person;
+      break;
     } else {
-      map.set(person, value - 1);
+      participantMap.set(person, personCnt - 1);
     }
   }
 
