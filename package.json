@@ -1,5 +1,15 @@
 {
+  "type": "module",
   "dependencies": {
-    "eslint-config-prettier": "^8.1.0"
+    "chart.js": "^3.5.1",
+    "eslint-config-prettier": "^8.1.0",
+    "lodash": "^4.17.21",
+    "qs": "^6.10.1",
+    "ts-node": "^10.2.1",
+    "tslint-config-prettier": "^1.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.4",
+    "typescript": "^4.4.3"
   }
 }
