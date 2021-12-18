@@ -13,5 +13,3 @@ function getConcatenation2(nums: number[]): number[] {
     }
     return ans
 };
-
-g

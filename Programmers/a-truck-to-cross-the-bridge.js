@@ -2,42 +2,41 @@
 
 function solution(bridge_length, weight, truck_weights) {
   let answer = 1;
-  let bridge = [{ w: truck_weights[0], t: bridge_length - 1 }];
-  let curWeight = weight - truck_weights[0];
-  const newTruckWeights = truck_weights;
-  newTruckWeights.shift();
+  let trucksInBridge = [{ w: truck_weights[0], t: bridge_length - 1 }];
+  let maximumWeight = weight - truck_weights[0];
+  truck_weights.shift();
 
-  const filterTrucksInTheBridge = (preBridge) => {
-    return preBridge
-      .filter((truck) => {
-        if (truck.t > 0) {
-          return true;
+  const getTrucksInBridge = (preTrucksInBridge) => {
+    return preTrucksInBridge
+      .reduce((acc, cur) => {
+        if (cur.t > 0) {
+          return [...acc, cur];
         }
-
-        curWeight += truck.w;
-        return false;
-      })
-      .map((truck) => {
-        return {
+        maximumWeight += cur.w;
+        return acc;
+      }, [])
+      .map((truck) => ({
           ...truck,
           t: truck.t - 1,
-        };
-      });
+      }));
   };
 
-  const addTruckInTheBridge = (truckWeight) => {
-    newTruckWeights.shift();
-    bridge.push({ w: truckWeight, t: bridge_length - 1 });
-    curWeight -= truckWeight;
+  const addTruckToBridge = (truckWeight) => {
+    truck_weights.shift();
+    trucksInBridge.push({ w: truckWeight, t: bridge_length - 1 });
+    maximumWeight -= truckWeight;
   };
 
-  while (bridge.length) {
+  const checkTruckCanCrossTheBridge = (truckWeight, lengthOfTrucksInBridge) => {
+    return maximumWeight - truckWeight >= 0 && lengthOfTrucksInBridge < bridge_length
+  } 
+
+  while (trucksInBridge.length) {
     answer++;
-    bridge = filterTrucksInTheBridge(bridge);
-
-    let curTruckWeight = newTruckWeights[0];
-    if (curWeight - curTruckWeight >= 0 && bridge.length < bridge_length) {
-      addTruckInTheBridge(curTruckWeight);
+    trucksInBridge = getTrucksInBridge(trucksInBridge);
+    let curTruckWeight = truck_weights[0];
+    if (checkTruckCanCrossTheBridge(curTruckWeight, trucksInBridge.length)) {
+      addTruckToBridge(curTruckWeight);
     }
   }
 
