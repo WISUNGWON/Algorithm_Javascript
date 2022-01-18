@@ -4,6 +4,7 @@
     "target": "ES5",
     "outDir": "./dist",
     "moduleResolution": "Node",
+    "module": "ESNEXT",
     "lib": ["ES2015", "DOM", "DOM.Iterable"]
   },
   "include": ["./src/**/*"],
