@@ -7,6 +7,6 @@
     "module": "ESNEXT",
     "lib": ["ES2015", "DOM", "DOM.Iterable"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./**/**/*"],
   "exclude": ["node_modules", "dist"]
 }
