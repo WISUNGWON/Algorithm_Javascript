@@ -1,66 +1,61 @@
 function solution(relation) {
-  var answer = 0;
-  let check = new Array(relation[0].length).fill(0);
-  let uniques = [];
-  // step1 : 각 속성을 기준으로 부분집합 만들기
-  let key = 0;
-  const step2 = (arr) => {
-    let len = arr[0].length;
-    let strArr = [];
-    for (let i = 0; i < len; i++) {
-      let str = '';
-      arr.map((v) => (str += v[i]));
-      strArr.push(str);
-    }
-    for (let i = 0; i < len - 1; i++) {
-      let curStr = strArr[i];
-      for (let j = i + 1; j < len; j++) {
-        if (curStr === strArr[j]) {
-          return;
-        }
+  var answer = [];
+  // 1. 컬럼의 조합만들기
+  const columnLen = relation[0].length;
+  let visited = new Array(columnLen).fill(false);
+  const keys = [];
+  const comb = (cnt) => {
+    if (cnt === columnLen) {
+      // 2. 후보키 판단 후 배열에 넣기
+      const res = visited.map((val, index) => {
+        if (val) return index
+      }).filter((val) => val !== undefined)
+      // res : [1 , 2, ...]
+      let joinedTable = [];
+      relation.forEach((tuple) => {
+        let joinedRow = "";
+        res.forEach((idx) => {
+          joinedRow += tuple[idx];
+        })
+        joinedTable.push(joinedRow);
+      })
+      // joinedTable안에 중복이 있는 지판단 
+      const set = new Set(joinedTable)
+      // 중복이 없으면 res를 keys(후보키들)에 넣기
+      if (set.size === relation.length) {
+        keys.push(res)
       }
+      return;
     }
-    let newArr = [...arr, key++];
-    uniques.push(newArr);
-  };
-  const step1 = (depth) => {
-    if (depth === check.length) {
-      // step2 만들어진 집합으로 unique한지 판단하기
-      let arrO = [];
-      check.forEach((v, index) => {
-        let tempArr = [];
-        if (v === 1) {
-          for (let i = 0; i < relation.length; i++) {
-            tempArr.push(relation[i][index]);
-          }
-          arrO.push(tempArr);
-        }
-      });
-      if (arrO.length > 0) {
-        step2(arrO);
-      }
-    } else {
-      check[depth] = 1;
-      step1(depth + 1);
-      check[depth] = 0;
-      step1(depth + 1);
-    }
-  };
-  step1(0);
-  //step3 최소성을 만족하는지 찾아보기
-  uniques.sort((a, b) => a.length - b.length);
-  let lastArr = [];
-  for (let i = 0; i < uniques.length; i++) {}
-  return answer;
+    visited[cnt] = true;
+    comb(cnt + 1);
+    visited[cnt] = false;
+    comb(cnt + 1);
+  }
+  // 3. 후보키 배열에서 최소성 판단 후 최종 값 구하기.
+  comb(0)
+  console.log(keys, " : before")
+  keys.sort((a, b) => a.length - b.length)
+  console.log(keys)
+  // 0번째는 유일한 애임.
+  // 따라서 판단하는 배열이 최종적으로 size가 0일 때 최소성 판단 종료
+  let [key, ...restKeys] = keys;
+  answer.push(key);
+  key.sort((a, b) => a - b);
+  let joinedKey = key.join("");
+  let temp = restKeys.filter((val) => !val.sort((a, b) => a - b).join("").includes(joinedKey))
+  while (temp.length > 0) {
+    let [key, ...restKeys] = temp;
+    answer.push(key);
+    key.sort((a, b) => a - b);
+    let joinedKey = key.join("");
+    temp = restKeys.filter((val) => !val.sort((a, b) => a - b).join("").includes(joinedKey))
+  }
+
+  return answer.length;
 }
 
-console.log(
-  solution([
-    ['100', 'ryan', 'music', '2'],
-    ['200', 'apeach', 'math', '2'],
-    ['300', 'tube', 'computer', '3'],
-    ['400', 'con', 'computer', '4'],
-    ['500', 'muzi', 'music', '3'],
-    ['600', 'apeach', 'music', '2'],
-  ])
-);
+/*
+  컬럼의 조합에 따라 유일성은 무조건 만족하지만 (keys) keys의 key가 최소성을 만족하는지는 확인해봐야 함.
+  02 -> 023 (ok), 012 (no)
+*/

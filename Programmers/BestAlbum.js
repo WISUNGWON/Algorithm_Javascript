@@ -1,28 +1,31 @@
-function solution(genres, plays) {
-  const arrMap = new Map();
-  const totalMap = new Map();
-  genres.map((genre, id) => {
-    const genreArr = arrMap.get(genre);
-    arrMap.set(
+function solutionOf베스트앨범(genres, plays) {
+  const genreMap = new Map();
+  genres.forEach((genre, index) => {
+    const value = genreMap.get(genre);
+    const play = plays[index];
+    genreMap.set(genre, value ? [...value, { index, play }] : [{ index, play }]);
+  });
+
+  return Array.from(genreMap.keys())
+    .map((genre) => ({
       genre,
-      genreArr
-        ? [...genreArr, { id, play: plays[id] }].sort((a, b) => b.play - a.play)
-        : [{ id, play: plays[id] }]
-    );
-    totalMap.set(genre, (totalMap.get(genre) || 0) + plays[id]);
-  });
+      playSum: genreMap.get(genre).reduce((prev, curr) => {
+        return prev + curr.play;
+      }, 0),
+    }))
+    .sort((a, b) => b.playSum - a.playSum)
+    .map(({ genre }) => {
+      const value = genreMap.get(genre);
+      return value
+        .sort((a, b) => {
+          if (a.play - b.play > 0) {
+            return -1;
+          }
 
-  const totalArr = [];
-  for (let [genre, play] of totalMap) {
-    totalArr.push({ genre, play });
-  }
-  totalArr.sort((a, b) => b.play - a.play);
-
-  const answer = [];
-  totalArr.forEach((total) => {
-    const genreArr = arrMap.get(total.genre);
-    if (genreArr[0]) answer.push(genreArr[0].id);
-    if (genreArr[1]) answer.push(genreArr[1].id);
-  });
-  return answer;
+          return a.index - b.index;
+        })
+        .filter((_, index) => index < 2)
+        .map((val) => val.index);
+    })
+    .flat();
 }
