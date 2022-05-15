@@ -3,6 +3,7 @@
   "scripts": {
     "test": "jest"
   },
+  "type": "module",
   "dependencies": {
     "chart.js": "^3.5.1",
     "eslint": "^8.7.0",
